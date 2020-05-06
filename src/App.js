@@ -1,25 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React,{useState} from 'react';
+import './App.sass';
+import {Route, Link, Switch, Redirect} from 'react-router-dom'
+import LogIn from './components/LogIn'
+import Home from './components/Home'
+import Welcome from './components/Welcome'
+import Signup from './components/SignUp'
+import MyLog from './components/MyLog'
+
 
 function App() {
+  const [userInfo, setUserInfo] = useState(()=>{
+    const result = localStorage.getItem('user')
+    return result? JSON.parse(result): []
+  })
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main>
+      <Switch>
+        <Route exact path='/'><Home/></Route>
+        <Route path='/login'><LogIn setUserInfo={setUserInfo}/></Route>
+        <Route path='/signup'><Signup setUserInfo={setUserInfo}/></Route>
+        <Route path='/welcome'><Welcome userInfo={userInfo}/></Route>
+        <Route path='/mylog'><MyLog userInfo={userInfo}/></Route>
+        <Redirect to='/'/>
+      </Switch>
+    </main>
   );
 }
 
